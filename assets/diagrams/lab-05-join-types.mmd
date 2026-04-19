@@ -1,0 +1,17 @@
+graph TB
+    subgraph Data["Input Tables"]
+        LEFT["Left: taxi_trips\nRows: A, B, C, D"]
+        RIGHT["Right: github_events\nRows: B, C, E, F"]
+    end
+
+    subgraph Joins["Join Types"]
+        INNER["INNER\nB, C\n(matching rows only)"]
+        LEFTO["LEFT OUTER\nA, B, C, D\n(all left + matching right)"]
+        RIGHTO["RIGHT OUTER\nB, C, E, F\n(all right + matching left)"]
+        FULLO["FULL OUTER\nA, B, C, D, E, F\n(all rows from both)"]
+        SEMI["LEFT SEMI\nB, C\n(left rows with match, no right cols)"]
+        ANTI["LEFT ANTI\nA, D\n(left rows WITHOUT match)"]
+    end
+
+    LEFT --> Joins
+    RIGHT --> Joins

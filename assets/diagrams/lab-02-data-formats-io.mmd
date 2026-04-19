@@ -1,0 +1,26 @@
+graph LR
+    subgraph Sources["Raw Data Sources"]
+        CSV["CSV\nText, schema inferred\nSlow reads"]
+        JSON["JSON\nText, nested\nSchema inferred"]
+        PQ["Parquet\nBinary, columnar\nSchema embedded"]
+        DELTA["Delta\nParquet + tx log\nACID, versioned"]
+    end
+
+    subgraph Read["spark.read"]
+        OPT["Options:\nheader, inferSchema\nschema, format"]
+    end
+
+    subgraph Write["df.write"]
+        MODE["Modes:\noverwrite, append\nignore, error"]
+    end
+
+    CSV --> Read
+    JSON --> Read
+    PQ --> Read
+    DELTA --> Read
+
+    Read --> DF["DataFrame"]
+    DF --> Write
+
+    Write --> PQ_OUT["Parquet"]
+    Write --> DELTA_OUT["Delta\n(recommended)"]

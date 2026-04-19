@@ -1,0 +1,26 @@
+graph TD
+    subgraph QueryExecution["Query Execution Pipeline"]
+        SQL["DataFrame / SQL"] --> LP["Logical Plan\n(unresolved)"]
+        LP --> ALP["Analyzed Logical Plan\n(resolved references)"]
+        ALP --> OLP["Optimized Logical Plan\n(Catalyst optimizer)"]
+        OLP --> PP["Physical Plan(s)"]
+        PP --> BEST["Selected Physical Plan\n(cost-based)"]
+        BEST --> RDD["Executed on cluster"]
+    end
+
+    subgraph Optimizations["Key Optimizations"]
+        CACHE["cache() / persist()\nStore in memory/disk"]
+        PART["repartition(n) / coalesce(n)\nControl parallelism"]
+        BJ["Broadcast join\nbroadcast(small_df)"]
+        AQE["Adaptive Query Execution\nRuntime re-optimization"]
+        PRED["Predicate pushdown\nFilter at source"]
+    end
+
+    subgraph Diagnostics["Diagnostics"]
+        EXP["df.explain(True)\nShow all plan stages"]
+        UI["Spark UI\nSQL tab, DAG view"]
+        METRICS["Shuffle read/write\nSpill to disk"]
+    end
+
+    QueryExecution --> Optimizations
+    QueryExecution --> Diagnostics

@@ -1,0 +1,28 @@
+graph TB
+    subgraph DeltaTable["Delta Table"]
+        DATA["Data Files\n(Parquet)"]
+        LOG["Transaction Log\n(_delta_log/)"]
+        LOG --> V0["Version 0\nInitial write"]
+        LOG --> V1["Version 1\nUpdate"]
+        LOG --> V2["Version 2\nDelete"]
+        LOG --> V3["Version 3\nMerge"]
+    end
+
+    subgraph Operations["Key Operations"]
+        TT["Time Travel\nVERSION AS OF n\nTIMESTAMP AS OF t"]
+        OPT["OPTIMIZE\nCompact small files"]
+        ZO["Z-ORDER BY col\nCo-locate data"]
+        VAC["VACUUM\nRemove old files"]
+        MERGE["MERGE INTO\nUpsert pattern"]
+        HIST["DESCRIBE HISTORY\nAudit log"]
+    end
+
+    subgraph ACID["ACID Guarantees"]
+        A["Atomicity\nAll or nothing"]
+        C["Consistency\nValid state"]
+        I["Isolation\nConcurrent reads/writes"]
+        D["Durability\nCommitted = permanent"]
+    end
+
+    DeltaTable --> Operations
+    DeltaTable --> ACID

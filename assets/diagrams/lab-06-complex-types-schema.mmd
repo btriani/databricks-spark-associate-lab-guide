@@ -1,0 +1,27 @@
+graph TD
+    subgraph JSON["GitHub Event JSON"]
+        ROOT["{event}"]
+        ROOT --> ID["id: string"]
+        ROOT --> TYPE["type: string"]
+        ROOT --> ACTOR["actor: struct"]
+        ACTOR --> A_ID["id: long"]
+        ACTOR --> A_LOGIN["login: string"]
+        ROOT --> REPO["repo: struct"]
+        REPO --> R_ID["id: long"]
+        REPO --> R_NAME["name: string"]
+        ROOT --> PAYLOAD["payload: struct (varies)"]
+        PAYLOAD --> COMMITS["commits: array of struct"]
+        COMMITS --> MSG["message: string"]
+        COMMITS --> SHA["sha: string"]
+    end
+
+    subgraph Spark["Spark Type Mapping"]
+        ST["StructType"]
+        AR["ArrayType"]
+        MP["MapType"]
+        ST --> NESTED["Nested access:\ncol('actor.login')"]
+        AR --> EXPLODE["explode(col('commits'))"]
+        MP --> GETITEM["col('map')['key']"]
+    end
+
+    JSON --> Spark

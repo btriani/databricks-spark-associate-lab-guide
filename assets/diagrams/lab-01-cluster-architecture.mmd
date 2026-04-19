@@ -1,0 +1,23 @@
+graph TB
+    subgraph SparkApp["Spark Application"]
+        direction TB
+        JOB["Job\n(triggered by action)"]
+        JOB --> S1["Stage 1\n(before shuffle)"]
+        JOB --> S2["Stage 2\n(after shuffle)"]
+        S1 --> T1["Task 1.1"]
+        S1 --> T2["Task 1.2"]
+        S1 --> T3["Task 1.3"]
+        S2 --> T4["Task 2.1"]
+        S2 --> T5["Task 2.2"]
+    end
+
+    subgraph SparkUI["Spark UI Tabs"]
+        JOBS["Jobs Tab\nOverall progress"]
+        STAGES["Stages Tab\nShuffle metrics"]
+        STORAGE["Storage Tab\nCached RDDs"]
+        ENV["Environment Tab\nConfiguration"]
+        EXEC["Executors Tab\nMemory & CPU"]
+        SQLUI["SQL/DataFrame Tab\nQuery plans"]
+    end
+
+    SparkApp --> SparkUI

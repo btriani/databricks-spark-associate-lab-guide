@@ -1,0 +1,27 @@
+graph TD
+    subgraph Catalog["Unity Catalog Hierarchy"]
+        CAT["Catalog\nspark_lab_guide"]
+        SCH["Schema\ndefault"]
+        TBL["Tables\ntaxi_trips, github_events"]
+        VW["Views"]
+        VOL["Volumes\nnyc_taxi, github_archive"]
+        CAT --> SCH
+        SCH --> TBL
+        SCH --> VW
+        SCH --> VOL
+    end
+
+    subgraph Views["View Types"]
+        TV["Temp View\ncreateOrReplaceTempView()\nSession-scoped"]
+        GTV["Global Temp View\ncreateGlobalTempView()\nApplication-scoped\nAccess: global_temp.name"]
+        PV["Persistent View\nCREATE VIEW in catalog\nSurvives session"]
+    end
+
+    subgraph Access["SQL Access"]
+        Q1["spark.sql('SELECT * FROM taxi_trips')"]
+        Q2["spark.sql('SELECT * FROM global_temp.my_view')"]
+        Q3["SQL: SELECT * FROM spark_lab_guide.default.taxi_trips"]
+    end
+
+    Catalog --> Access
+    Views --> Access

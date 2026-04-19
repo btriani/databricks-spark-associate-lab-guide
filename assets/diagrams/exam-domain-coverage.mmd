@@ -1,0 +1,31 @@
+graph LR
+    subgraph Domains["Exam Domains"]
+        A["Architecture\n20%"]
+        SQL["Spark SQL\n20%"]
+        DF["DataFrame API\n30%"]
+        TT["Troubleshooting\n10%"]
+        SS["Streaming\n10%"]
+        SC["Spark Connect\n5%"]
+        PA["Pandas API\n5%"]
+    end
+
+    A --> L01["Lab 01"]
+    A --> L10["Lab 10"]
+
+    SQL --> L04["Lab 04"]
+    SQL --> L07["Lab 07"]
+    SQL --> L09["Lab 09"]
+
+    DF --> L02["Lab 02"]
+    DF --> L03["Lab 03"]
+    DF --> L04
+    DF --> L05["Lab 05"]
+    DF --> L06["Lab 06"]
+
+    TT --> L09
+    TT --> L10
+
+    SS --> L08["Lab 08"]
+
+    SC --> L09
+    PA --> L09

@@ -1,0 +1,16 @@
+graph TB
+    subgraph AggFlow["Aggregation Flow"]
+        DF1["DataFrame"] --> GB["groupBy(col)"]
+        GB --> SHUFFLE1["Shuffle\n(data redistribution)"]
+        SHUFFLE1 --> AGG["agg()\ncount, sum, avg, min, max"]
+        AGG --> RESULT1["Result DataFrame"]
+    end
+
+    subgraph JoinFlow["Join Strategies"]
+        direction TB
+        SMALL["Small Table\n< 10MB"] --> BJ["Broadcast Join\n(no shuffle)"]
+        LARGE1["Large Table"] --> SMJ["Sort-Merge Join\n(shuffle both sides)"]
+        LARGE2["Large Table"] --> SMJ
+        BJ --> RESULT2["Result"]
+        SMJ --> RESULT2
+    end

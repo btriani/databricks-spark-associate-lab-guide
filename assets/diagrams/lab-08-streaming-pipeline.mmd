@@ -1,0 +1,30 @@
+graph LR
+    subgraph Source["Source"]
+        FILES["JSON Files\n(GitHub Archive)"]
+    end
+
+    subgraph Processing["Stream Processing"]
+        RS["readStream\n.format('json')\n.schema(schema)"]
+        TRANSFORM["Transformations\nfilter, groupBy,\nwindow, watermark"]
+    end
+
+    subgraph Sink["Sink"]
+        WS["writeStream\n.format('delta')\n.outputMode()"]
+    end
+
+    subgraph Modes["Output Modes"]
+        APPEND["append\nNew rows only"]
+        UPDATE["update\nChanged rows"]
+        COMPLETE["complete\nFull result each time"]
+    end
+
+    subgraph Triggers["Trigger Types"]
+        AVAIL["availableNow\n(process all, then stop)"]
+        ONCE["once\n(deprecated)"]
+        PROC["processingTime\n('10 seconds')"]
+    end
+
+    FILES --> RS --> TRANSFORM --> WS
+    WS --> Modes
+    WS --> Triggers
+    WS --> CP["Checkpoint\n(required for fault tolerance)"]

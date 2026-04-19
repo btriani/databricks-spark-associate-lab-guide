@@ -1,0 +1,28 @@
+graph LR
+    subgraph Transformations["Transformations (Lazy)"]
+        direction TB
+        F["filter()"]
+        S["select()"]
+        W["withColumn()"]
+        G["groupBy()"]
+        J["join()"]
+    end
+
+    subgraph DAG["Execution Plan (DAG)"]
+        direction TB
+        LP["Logical Plan"]
+        OP["Optimized Plan\n(Catalyst)"]
+        PP["Physical Plan"]
+    end
+
+    subgraph Actions["Actions (Eager)"]
+        direction TB
+        SH["show()"]
+        CO["count()"]
+        CL["collect()"]
+        WR["write()"]
+        TK["take()"]
+    end
+
+    Transformations -->|"Build plan\nnothing executes"| DAG
+    DAG -->|"Triggered by action\nexecutes on cluster"| Actions

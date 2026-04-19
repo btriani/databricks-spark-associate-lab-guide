@@ -1,0 +1,44 @@
+graph TB
+    subgraph Driver["Driver Node"]
+        SS[SparkSession] --> SC[SparkContext]
+        SC --> DAG[DAG Scheduler]
+        DAG --> TS[Task Scheduler]
+    end
+
+    subgraph CM["Cluster Manager"]
+        RM[Resource Manager]
+    end
+
+    subgraph Executor1["Executor 1"]
+        T1A[Task] --> C1[Cache]
+        T1B[Task] --> C1
+    end
+
+    subgraph Executor2["Executor 2"]
+        T2A[Task] --> C2[Cache]
+        T2B[Task] --> C2
+    end
+
+    subgraph Executor3["Executor N"]
+        T3A[Task] --> C3[Cache]
+        T3B[Task] --> C3
+    end
+
+    TS -->|"Schedule Tasks"| RM
+    RM -->|"Allocate Resources"| Executor1
+    RM -->|"Allocate Resources"| Executor2
+    RM -->|"Allocate Resources"| Executor3
+
+    Executor1 -->|"Results"| Driver
+    Executor2 -->|"Results"| Driver
+    Executor3 -->|"Results"| Driver
+
+    subgraph Storage["Data Sources"]
+        DL[(Delta Lake)]
+        PQ[(Parquet)]
+        CSV[(CSV/JSON)]
+    end
+
+    Executor1 --> Storage
+    Executor2 --> Storage
+    Executor3 --> Storage
