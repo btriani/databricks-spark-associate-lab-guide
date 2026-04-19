@@ -1,6 +1,5 @@
-graph LR
+graph TD
     subgraph Transformations["Transformations (Lazy)"]
-        direction TB
         F["filter()"]
         S["select()"]
         W["withColumn()"]
@@ -9,14 +8,12 @@ graph LR
     end
 
     subgraph DAG["Execution Plan (DAG)"]
-        direction TB
         LP["Logical Plan"]
-        OP["Optimized Plan\n(Catalyst)"]
-        PP["Physical Plan"]
+        LP --> OP["Optimized Plan\n(Catalyst)"]
+        OP --> PP["Physical Plan"]
     end
 
     subgraph Actions["Actions (Eager)"]
-        direction TB
         SH["show()"]
         CO["count()"]
         CL["collect()"]
